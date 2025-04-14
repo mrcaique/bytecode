@@ -1,0 +1,46 @@
+name: RPM build
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build_tar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Replace version in RPM spec
+        run: sed -Ei 's/(^Version:[[:space:]]*).*/\1${{github.ref_name}}/' release/python-bytecode.spec
+
+      - name: Create source archive
+        run: tar -czvf python-bytecode-${{ github.ref_name }}.tar.gz *
+
+      - name: Upload source archive as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: python-bytecode-${{ github.ref_name }}.tar.gz
+          path: python-bytecode-${{ github.ref_name }}.tar.gz 
+
+  build_rpm:
+    needs: [ 'build_tar' ]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download source archive
+        uses: actions/download-artifact@v4
+        with:
+          name: python-bytecode-${{ github.ref_name }}.tar.gz
+
+      - name: Build RPM package
+        id: rpm
+        uses: naveenrajm7/rpmbuild@master
+        with:
+          spec_file: "release/python-bytecode.spec"
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Binary RPM
+          path: ${{ steps.rpm.outputs.rpm_dir_path }}
