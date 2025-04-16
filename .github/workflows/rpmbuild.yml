@@ -1,0 +1,27 @@
+name: RPM build
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build_rpm:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Create source archive
+        run: >
+          cd .. 
+          && tar -czvf python-bytecode.tar.gz bytecode
+          && mv python-bytecode.tar.gz bytecode/.github/actions/buildrpm
+
+      - name: Build RPM package
+        id: rpm
+        uses: ./.github/actions/buildrpm
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Binary RPM
+          path: ${{ steps.rpm.outputs.rpm_dir_path }}
