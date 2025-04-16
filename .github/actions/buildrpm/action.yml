@@ -1,0 +1,10 @@
+name: "Build RPM"
+description: "Build RPM package"
+
+outputs:
+  rpm-package:
+    description: "Bytecode is a Python module to generate and modify bytecode"
+
+runs:
+  using: "docker"
+  image: "Dockerfile"
