@@ -3,6 +3,8 @@ name: RPM build
 on:
   push:
     branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
 jobs:
   build_rpm:
@@ -13,15 +15,15 @@ jobs:
       - name: Create source archive
         run: >
           cd .. 
-          && tar -czvf python-bytecode.tar.gz bytecode
+          && tar -czf python-bytecode.tar.gz bytecode
           && mv python-bytecode.tar.gz bytecode/.github/actions/buildrpm
 
       - name: Build RPM package
         id: rpm
         uses: ./.github/actions/buildrpm
 
-      - name: Upload artifact
+      - name: Upload RPM as artifact
         uses: actions/upload-artifact@v4
         with:
-          name: Binary RPM
-          path: ${{ steps.rpm.outputs.rpm_dir_path }}
+          name: binary-rpm
+          path: ${{ github.workspace }}
