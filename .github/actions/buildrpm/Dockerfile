@@ -10,21 +10,16 @@ RUN zypper in -y \
     python312-pip python312-setuptools python312-setuptools_scm python312-wheel python312-pytest \
     python313-pip python313-setuptools python313-setuptools_scm python313-wheel python313-pytest
 
-# Create an user named rpmuser and grant sudo access
-RUN useradd rpmuser -u 5002 -g users -p rpmbuild
+RUN rpmdev-setuptree
+
+WORKDIR /root/rpmbuild
 
 # Copy necessary files to build a rpm package
-COPY python-bytecode.spec /home/rpmuser/python-bytecode.spec
-COPY python-bytecode*.tar.gz /home/rpmuser/python-bytecode.tar.gz
+COPY python-bytecode.spec SPECS/
+COPY python-bytecode.tar.gz SOURCES/
 
 # Set up the entrypoint script
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
-USER rpmuser
-
-WORKDIR /home/rpmbuild
-
-# Setup build directory
-RUN rpmdev-setuptree
 ENTRYPOINT ["/entrypoint.sh"]
