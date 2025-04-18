@@ -25,5 +25,5 @@ jobs:
       - name: Upload RPM as artifact
         uses: actions/upload-artifact@v4
         with:
-          name: binary-rpm
-          path: ${{ github.workspace }}
+          name: python-bytecode-binary-rpm
+          path: ${{ github.workspace }}/*.rpm
