@@ -17,7 +17,7 @@
 
 
 Name:           python-bytecode
-Version:        0.16.1
+Version:        ##RPMVERSION##
 Release:        1%{?dist}
 Summary:        Python module to generate and modify bytecode
 License:        MIT

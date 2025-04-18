@@ -2,15 +2,18 @@ name: RPM build
 
 on:
   push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+    tags:
+      - 'v*.*.*'
 
 jobs:
   build_rpm:
+    if: ${{ github.event.base_ref == 'refs/heads/main' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
+      - name: Set release version env
+        run: echo "RELEASE_VERSION=${GITHUB_REF:11}" >> $GITHUB_REF
 
       - name: Create source archive
         run: >
@@ -25,5 +28,5 @@ jobs:
       - name: Upload RPM as artifact
         uses: actions/upload-artifact@v4
         with:
-          name: python-bytecode-binary-rpm
+          name: python-bytecode-binary-rpm-${{ env.RELEASE_VERSION }}
           path: ${{ github.workspace }}/*.rpm
