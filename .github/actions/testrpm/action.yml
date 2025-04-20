@@ -1,0 +1,6 @@
+name: "Test RPM package"
+description: "Test RPM package on openSUSE Tumbleweed"
+
+runs:
+  using: "docker"
+  image: "Dockerfile"
