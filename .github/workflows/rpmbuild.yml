@@ -15,14 +15,7 @@ jobs:
       - name: Set release version env
         run: echo "RELEASE_VERSION=${GITHUB_REF:11}" >> $GITHUB_ENV
 
-      - name: Create source archive
-        run: >
-          cd .. 
-          && tar -czf python-bytecode.tar.gz bytecode
-          && mv python-bytecode.tar.gz bytecode/.github/actions/buildrpm
-
       - name: Build RPM package
-        id: rpm
         uses: ./.github/actions/buildrpm
 
       - name: Upload RPM as artifact

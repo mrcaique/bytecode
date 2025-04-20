@@ -45,6 +45,9 @@ Python module to generate and modify bytecode
 %pyproject_install
 %python_expand %fdupes %{buildroot}%{$python_sitelib}
 
+%check
+%pytest
+
 %files %{python_files}
 %doc README.rst
 %license COPYING
